@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+#The previous version of Couchbase is removed first and then
+#Installs the Couchbase Server of your choice
+#
+#
+#Getting the installed version as input
+
+echo -e " Please enter the version you want to install(1.8.1/2.0.0/2.0.1/2.1.0) : \c "
+read version
+
+echo " checking the installed version"
+x=`rpm -qa | grep couchbase`
+y=`echo $x | cut -d '-' -f 3`
+
+#checking if the version installed & the version requested is same
+
+if [ $y -eq $version ]; then
+echo -e " The installed version is same as the version requested to install \c"
+
+#If not then continue the installation process
+
+else
+rpm -e couchbase-server
+echo
+echo "=========================================================================="
+echo "The previous version is removed"
+
+wget http://packages.couchbase.com/releases/$version/couchbase-server-enterprise_x86_64_$version.rpm
+rpm -ivh couchbase-server-enterprise_x86_64_$version.rpm
+
+echo "Couchbase version : $version installed succussfully"
+fi
