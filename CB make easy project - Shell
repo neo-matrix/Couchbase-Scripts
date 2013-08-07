@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+#A Script to help you various activites on couchbase server
+#
+
+echo "1. Install couchbase"
+echo "2. Uninstall couchbase"
+echo "3. Setup couchbase"
+echo "4. Create a bucket"
+echo "5. Run & Upload CBcollect_info"
+echo "6. Use Couch.pl -- Troubleshooter"
+
+echo -e "Make your selection: \c"
+read selection junk
+
+if [ $selection > 6 ];
+then
+echo "Please make a valid selection in the next run"
+fi
+
+case $selection in
+
+1)echo -e " Please enter the version you want to install(1.8.1/2.0.0/2.0.1/2.1.0) : \c "
+read version
+
+echo " checking the installed version"
+echo ".........."
+x=`rpm -qa | grep couchbase`
+y=`echo $x | cut -d '-' -f 3`
+echo ".........."
+
+#checking if the version installed & the version requested is same
+
+if [ $y -eq $version ]; then
+echo -e " The installed version is same as the version requested to install \c "
+
+#If not then continue the installation process
+
+else
+rpm -e couchbase-server
+echo
+echo "==========================================================================
+"
+echo "The previous version is removed"
+rpm -e couchbase-server
+echo
+echo "==========================================================================
+"
+echo "The previous version is removed"
+
+wget http://packages.couchbase.com/releases/$version/couchbase-server-enterprise
+_x86_64_$version.rpm
+rpm -ivh couchbase-server-enterprise_x86_64_$version.rpm
+
+echo "Couchbase version : $version installed succussfully"
+fi
+;;
+
+*) echo "Project in construction"
+;;
+
+esac
